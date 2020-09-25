@@ -4,6 +4,7 @@ import CuidadInfo from "./Components/CuidadInfo";
 import Nav from "./Components/Nav";
 import RenderCards from "./Components/RenderCards";
 
+const apiKey = "4ae2636d8dfbdc3044bede63951a019b";
 //Componente App
 const App = () => {
   //Creamos un state donde iremos agregando las cuidades que luego se las pasaremos como props a renderCards
@@ -13,7 +14,7 @@ const App = () => {
   const buscadorDeCiudades = (ciudad) => {
     const apiData = async (url) => {
       const urlApi = await fetch(url);
-      const urlApiJson = urlApi.json();
+      const urlApiJson = await urlApi.json();
       if (urlApiJson.main !== undefined) {
         const ciudadCard = {
           min: urlApiJson.main.temp_min,
@@ -38,7 +39,7 @@ const App = () => {
       }
     };
     apiData(
-      `http://api.openweathermap.org/data/2.5/weather?q=${ciudad}&appid=00be21c6ee10ab788dbb8f9ec6800041`
+      `http://api.openweathermap.org/data/2.5/weather?q=${ciudad}&appid=${apiKey}&units=metric`
     );
   };
 
@@ -61,6 +62,7 @@ const App = () => {
   return (
     <>
       <Route
+        exact
         path="/"
         render={() => <Nav buscadorDeCiudades={buscadorDeCiudades} />}
       />
@@ -68,14 +70,14 @@ const App = () => {
         exact
         path="/"
         render={() => (
-          <RenderCards cuidades={ciudades} quitarCiudad={quitarCuidad} />
+          <RenderCards ciudades={ciudades} quitarCiudad={quitarCuidad} />
         )}
       />
       <Route
         exact
         path="/cuidad/:ciudadId"
         render={({ match }) => (
-          <CuidadInfo ciudades={filtrarCuidad(match.params.ciudadId)} />
+          <CuidadInfo ciudad={filtrarCuidad(match.params.ciudadId)} />
         )}
       />
     </>
