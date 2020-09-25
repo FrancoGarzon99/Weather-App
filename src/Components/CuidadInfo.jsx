@@ -4,12 +4,12 @@ const CuidadInfo = ({ ciudad }) => {
   return (
     <>
       <Link to="/">
-        <button>volver</button>
+        <button>Volver</button>
       </Link>
       <div>
         <img
           src={`http://openweathermap.org/img/wn/${ciudad.img}@2x.png`}
-          alt="Logo Clima"
+          alt="Logo"
         />
         <p>{ciudad.name}</p>
         <p>{ciudad.min}</p>

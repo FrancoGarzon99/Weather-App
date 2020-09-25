@@ -5,12 +5,12 @@ import { Link } from "react-router-dom";
 const Card = ({ min, max, name, img, quitarCiudad, id }) => {
   return (
     <>
+      <button onClick={quitarCiudad}>x</button>
       <Link to={`/cuidad/${id}`}>
         <div>
-          <button onClick={quitarCiudad}>x</button>
           <img
-            src={"http://openweathermap.org/img/wn/" + img + "@2x.png"}
-            alt="Logo Clima"
+            src={`http://openweathermap.org/img/wn/${img}@2x.png`}
+            alt="Logo"
           />
           <p>{Math.round(min)} °</p>
           <p>{Math.round(max)} °</p>

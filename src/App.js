@@ -13,29 +13,37 @@ const App = () => {
   //Nuestro primer metodo BuscadorDeCiudades va a realizar la peticion a la api pasandole en nombre de la cuidad por parametro y luego esa cuidad llegara a url de la api
   const buscadorDeCiudades = (ciudad) => {
     const apiData = async (url) => {
-      const urlApi = await fetch(url);
-      const urlApiJson = await urlApi.json();
-      if (urlApiJson.main !== undefined) {
-        const ciudadCard = {
-          min: urlApiJson.main.temp_min,
-          max: urlApiJson.main.temp_max,
-          img: urlApiJson.weather[0].icon,
-          id: urlApiJson.id,
-          wind: urlApiJson.wind.speed,
-          temp: urlApiJson.main.temp,
-          name: urlApiJson.name,
-          weather: urlApiJson.weather[0].main,
-          clouds: urlApiJson.clouds.all,
-          latitud: urlApiJson.coord.lat,
-          longitud: urlApiJson.coord.lon,
-        };
-        if (!ciudades.some((ciu) => ciu.id === ciudadCard.id)) {
-          setCiudades((ciudadesAnt) => [...ciudadesAnt, ciudadCard]);
-        } else {
-          alert("Cuidad existente");
+      try {
+        const urlApi = await fetch(url);
+        const urlApiJson = await urlApi.json();
+
+        if (urlApiJson.cod !== 200) {
+          return alert(`Debes ingresar la cuidad ${urlApiJson.cod}`);
         }
-      } else {
-        alert("Ciudad no encontrada");
+        if (urlApiJson.main !== undefined) {
+          const ciudadCard = {
+            min: urlApiJson.main.temp_min,
+            max: urlApiJson.main.temp_max,
+            img: urlApiJson.weather[0].icon,
+            id: urlApiJson.id,
+            wind: urlApiJson.wind.speed,
+            temp: urlApiJson.main.temp,
+            name: urlApiJson.name,
+            weather: urlApiJson.weather[0].main,
+            clouds: urlApiJson.clouds.all,
+            latitud: urlApiJson.coord.lat,
+            longitud: urlApiJson.coord.lon,
+          };
+          if (!ciudades.some((ciu) => ciu.id === ciudadCard.id)) {
+            setCiudades((ciudadesAnt) => [...ciudadesAnt, ciudadCard]);
+          } else {
+            alert(`Ciudad existente ${urlApiJson.cod}`);
+          }
+        } else {
+          alert(`Ciudad no encontrada ${urlApiJson.cod}`);
+        }
+      } catch (error) {
+        console.log(error);
       }
     };
     apiData(
@@ -43,7 +51,7 @@ const App = () => {
     );
   };
 
-  //Nuestra segundo metodo quitarCuidad nos ayudara a filtrar esas cuidades que ya no queremos que se rendereen en pantalla
+  // //Nuestra segundo metodo quitarCuidad nos ayudara a filtrar esas cuidades que ya no queremos que se rendereen en pantalla
   const quitarCuidad = (id) => {
     setCiudades((ciudadesAnt) => ciudadesAnt.filter((ci) => ci.id !== id));
   };
